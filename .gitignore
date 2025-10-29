@@ -1,0 +1,4 @@
+.env
+.vercel
+.output
+node_modules

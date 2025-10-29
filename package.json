@@ -1,0 +1,24 @@
+{
+  "name": "nitro-app",
+  "private": true,
+  "scripts": {
+    "build": "nitro build",
+    "dev": "nitro dev",
+    "preview": "node .output/server/index.mjs"
+  },
+  "devDependencies": {
+    "h3": "^1.15.4",
+    "nitropack": "^2.12.4"
+  },
+  "dependencies": {
+    "@vercel/kv": "^3.0.0",
+    "consola": "^3.4.2",
+    "defu": "^6.1.4",
+    "destr": "^2.0.5",
+    "ofetch": "^1.5.0",
+    "resend": "^6.3.0",
+    "ufo": "^1.6.1",
+    "unstorage": "^1.17.1",
+    "zod": "^4.1.12"
+  }
+}
