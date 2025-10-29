@@ -2,6 +2,14 @@ import { Resend } from 'resend'
 import { consola } from 'consola'
 import type { Apartment } from './types'
 
+// Validate required env vars at module init
+if (!process.env.RESEND_API_KEY) {
+  throw new Error('RESEND_API_KEY env var is required')
+}
+if (!process.env.NOTIFICATION_EMAIL) {
+  throw new Error('NOTIFICATION_EMAIL env var is required')
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function sendApartmentNotification(apartment: Apartment): Promise<void> {
@@ -40,9 +48,14 @@ export async function sendBatchNotification(apartments: Apartment[]): Promise<vo
 
   consola.info(`Sending ${apartments.length} notifications`)
 
-  for (const apt of apartments) {
+  for (let i = 0; i < apartments.length; i++) {
+    const apt = apartments[i]
     try {
       await sendApartmentNotification(apt)
+      // Add delay to avoid hitting Resend rate limits (except for last email)
+      if (i < apartments.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 1500))
+      }
     } catch (error) {
       // Log but continue with other notifications
       consola.error(`Failed to notify for ${apt.id}`, error)
