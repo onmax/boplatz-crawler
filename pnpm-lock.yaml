@@ -40,7 +40,7 @@ importers:
         specifier: ^1.15.4
         version: 1.15.4
       nitropack:
-        specifier: ^2.12.4
+        specifier: ^2.12.9
         version: 2.12.9(@upstash/redis@1.35.6)(@vercel/kv@3.0.0)
 
 packages:
