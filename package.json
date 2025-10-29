@@ -4,11 +4,14 @@
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
-    "preview": "node .output/server/index.mjs"
+    "preview": "node .output/server/index.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "h3": "^1.15.4",
-    "nitropack": "^2.12.9"
+    "nitropack": "^2.12.9",
+    "vitest": "^4.0.5"
   },
   "dependencies": {
     "@vercel/kv": "^3.0.0",
