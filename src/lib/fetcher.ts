@@ -5,16 +5,81 @@ const GRAPHQL_URL = 'https://www.boplatssyd.se/mypages/api'
 
 const GRAPHQL_QUERY = `query getRentalObjectsAvailable {
   getRentalObjectsAvailable {
+    regionNames
+    districtNames
+    regionDistrictNames
+    landlordNames
+    allLandlordNames
+    allRegionDistrictNames
+    allRegionNames
+    allBoendeTyp {
+      rentalObjectCategoryId
+      name
+    }
+    allOvrigt {
+      rentalObjectCategoryId
+      name
+    }
     rentalObjects {
-      rentalObjectId
       rooms
       area
+      rentalObjectId
+      balcony
+      elevator
       street
       rent
+      rentFormated
+      rentCurrency
+      rentDescription
       regionName
+      region {
+        regionId
+      }
+      district {
+        districtId
+      }
       districtName
+      imagePrimaryId
+      imagePrimaryCdn
+      startDate
+      startDateFormated
+      endDate
+      endDateFormated
+      moveInDate
       moveInDateFormated
       landlord
+      landlordId
+      projectName
+      latitude
+      longitude
+      queueTypeId
+      queueDefault
+      queueTenant
+      queueTransfer
+      boendeTyp {
+        rentalObjectCategoryId
+        name
+      }
+      bostadsTyp {
+        rentalObjectCategoryId
+        name
+      }
+      kontraktsTyp {
+        rentalObjectCategoryId
+        name
+      }
+      formedlingsTyp {
+        rentalObjectCategoryId
+        name
+      }
+      fastighetsStatus {
+        rentalObjectCategoryId
+        name
+      }
+      rentalObjectCategories {
+        rentalObjectCategoryId
+        name
+      }
     }
   }
 }`
