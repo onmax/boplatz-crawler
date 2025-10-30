@@ -50,3 +50,15 @@ export async function filterNewApartments(apartmentIds: string[]): Promise<strin
     return apartmentIds
   }
 }
+
+export async function clearAllSeenApartments(): Promise<number> {
+  try {
+    const keys = await storage.getKeys(SEEN_PREFIX)
+    await Promise.all(keys.map(key => storage.removeItem(key)))
+    consola.success(`Cleared ${keys.length} seen apartments`)
+    return keys.length
+  } catch (error) {
+    consola.error('Failed to clear seen apartments:', error)
+    throw error
+  }
+}
