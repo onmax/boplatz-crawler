@@ -14,6 +14,8 @@ const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID
 
 export async function sendApartmentNotification(apartment: Apartment): Promise<void> {
   try {
+    const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(apartment.location + ', Sweden')}`
+
     const message = `🏠 *New Apartment in ${apartment.location}*
 
 📍 *Location:* ${apartment.location}
@@ -22,7 +24,7 @@ export async function sendApartmentNotification(apartment: Apartment): Promise<v
 📏 *Size:* ${apartment.sqm} sqm
 📅 *Posted:* ${apartment.postedAt.toLocaleDateString()}
 
-🔗 [View apartment](${apartment.url})`
+🔗 [View apartment](${apartment.url}) | 🗺️ [Google Maps](${gmapsUrl})`
 
     const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`
     const response = await fetch(url, {
@@ -32,7 +34,12 @@ export async function sendApartmentNotification(apartment: Apartment): Promise<v
         chat_id: TG_CHAT_ID,
         text: message,
         parse_mode: 'Markdown',
-        disable_web_page_preview: false
+        disable_web_page_preview: true,
+        reply_markup: {
+          inline_keyboard: [[
+            { text: '👎 Not interested', callback_data: `delete_msg` }
+          ]]
+        }
       })
     })
 
