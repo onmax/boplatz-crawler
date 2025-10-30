@@ -1,16 +1,16 @@
 import { createStorage } from 'unstorage'
-import vercelKVDriver from 'unstorage/drivers/vercel-kv'
+import redisDriver from 'unstorage/drivers/redis'
 import consola from 'consola'
 
 // Validate env vars
-if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
-  throw new Error('KV_REST_API_URL and KV_REST_API_TOKEN must be set')
+if (!process.env.REDIS_URL) {
+  throw new Error('REDIS_URL must be set')
 }
 
 const storage = createStorage({
-  driver: vercelKVDriver({
-    url: process.env.KV_REST_API_URL,
-    token: process.env.KV_REST_API_TOKEN,
+  driver: redisDriver({
+    url: process.env.REDIS_URL,
+    ttl: 30 * 24 * 60 * 60, // 30 days default TTL
   }),
 })
 
