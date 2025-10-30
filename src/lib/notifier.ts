@@ -40,25 +40,33 @@ export async function sendApartmentNotification(apartment: Apartment): Promise<v
   }
 }
 
-export async function sendBatchNotification(apartments: Apartment[]): Promise<void> {
+export async function sendBatchNotification(apartments: Apartment[]): Promise<{ sent: number, failed: number }> {
   if (apartments.length === 0) {
     consola.info('No new apartments to notify')
-    return
+    return { sent: 0, failed: 0 }
   }
 
   consola.info(`Sending ${apartments.length} notifications`)
+
+  let sent = 0
+  let failed = 0
 
   for (let i = 0; i < apartments.length; i++) {
     const apt = apartments[i]
     try {
       await sendApartmentNotification(apt)
+      sent++
       // Add delay to avoid hitting Resend rate limits (except for last email)
       if (i < apartments.length - 1) {
         await new Promise(resolve => setTimeout(resolve, 1500))
       }
     } catch (error) {
+      failed++
       // Log but continue with other notifications
       consola.error(`Failed to notify for ${apt.id}`, error)
     }
   }
+
+  consola.info(`Notifications complete: ${sent} sent, ${failed} failed`)
+  return { sent, failed }
 }

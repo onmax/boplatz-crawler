@@ -45,8 +45,11 @@ export default defineEventHandler(async (event) => {
 
     // Step 5: Notify
     consola.info('Step 5: Sending notifications')
-    await sendBatchNotification(newApartments)
-    stats.notified = newApartments.length
+    const emailResult = await sendBatchNotification(newApartments)
+    stats.notified = emailResult.sent
+    if (emailResult.failed > 0) {
+      consola.warn(`${emailResult.failed} email(s) failed to send`)
+    }
 
     // Step 6: Mark as seen
     consola.info('Step 6: Updating state')
