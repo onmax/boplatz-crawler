@@ -12,3 +12,13 @@ export function getFilterConfig(): FilterConfig {
 
   return config
 }
+
+export function getHomeqConfig() {
+  const env = process.env
+
+  return {
+    centerLat: env.HOMEQ_CENTER_LAT ? Number(env.HOMEQ_CENTER_LAT) : undefined,
+    centerLng: env.HOMEQ_CENTER_LNG ? Number(env.HOMEQ_CENTER_LNG) : undefined,
+    radiusKm: env.HOMEQ_RADIUS_KM ? Number(env.HOMEQ_RADIUS_KM) : 20,
+  }
+}
