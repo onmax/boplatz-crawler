@@ -49,7 +49,7 @@ async function fetchApartments(): Promise<Apartment[]> {
       rooms: Number(apt.rooms),
       sqm: Number(apt.area),
       url: `https://www.boplatssyd.se/mypages/app?region=${encodeURIComponent(apt.regionName)}#/object/${apt.rentalObjectId}`,
-      postedAt: apt.moveInDateFormated || new Date().toISOString(),
+      postedAt: apt.moveInDateFormated ? new Date(apt.moveInDateFormated) : new Date(),
     }))
 
     consola.success(`[boplatssyd] Fetched ${mapped.length} apartments`)
