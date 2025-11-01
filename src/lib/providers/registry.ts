@@ -2,10 +2,11 @@ import { consola } from 'consola'
 import type { Provider } from './base'
 import type { Apartment } from '../types'
 import { boplatssydProvider } from './boplatssyd'
+import { homeqProvider } from './homeq'
 
 const providers: Provider[] = [
   boplatssydProvider,
-  // homeqProvider will be added later
+  homeqProvider,
 ]
 
 export async function fetchAllApartments(): Promise<Apartment[]> {
