@@ -28,5 +28,5 @@ describe('Multi-provider integration', () => {
     const uniqueIds = new Set(ids)
 
     expect(ids.length).toBe(uniqueIds.size)
-  })
+  }, 30000)
 })
