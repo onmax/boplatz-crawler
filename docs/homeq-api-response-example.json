@@ -1,0 +1,232 @@
+{
+  "api_documentation": {
+    "endpoint": {
+      "url": "https://api.homeq.se/api/v3/search",
+      "method": "POST",
+      "description": "Search for rental apartments with geo-based filtering"
+    },
+    "authentication": {
+      "type": "JWT",
+      "header": "authorization: JWT <token>",
+      "token_format": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...",
+      "notes": "Token appears to be RS256 signed JWT, likely obtained from /api/auth/login or /api/v3/auth/login"
+    },
+    "request_structure": {
+      "headers": {
+        "authorization": "JWT <token>",
+        "content-type": "application/json"
+      },
+      "body": {
+        "min_room": "2",
+        "max_room": "4",
+        "is_early_access": false,
+        "sorting": "boost_value.desc",
+        "geo_bounds": {
+          "min_lat": 55.669813435465386,
+          "min_lng": 13.030489237226533,
+          "max_lat": 55.74509980198138,
+          "max_lng": 13.365440762774853
+        },
+        "zoom": 10.62,
+        "page": 1,
+        "amount": 9
+      }
+    },
+    "request_parameters": {
+      "min_room": {
+        "type": "string",
+        "description": "Minimum number of rooms",
+        "example": "2"
+      },
+      "max_room": {
+        "type": "string",
+        "description": "Maximum number of rooms",
+        "example": "4"
+      },
+      "is_early_access": {
+        "type": "boolean",
+        "description": "Filter for early access listings",
+        "example": false
+      },
+      "sorting": {
+        "type": "string",
+        "description": "Sort order for results",
+        "options": ["boost_value.desc", "price.asc", "price.desc", "date.desc"],
+        "default": "boost_value.desc"
+      },
+      "geo_bounds": {
+        "type": "object",
+        "description": "Geographic boundaries for search area",
+        "properties": {
+          "min_lat": "Southern boundary latitude",
+          "max_lat": "Northern boundary latitude",
+          "min_lng": "Western boundary longitude",
+          "max_lng": "Eastern boundary longitude"
+        }
+      },
+      "zoom": {
+        "type": "number",
+        "description": "Map zoom level (affects UI, may not affect API results)",
+        "example": 10.62
+      },
+      "page": {
+        "type": "number",
+        "description": "Pagination page number",
+        "default": 1
+      },
+      "amount": {
+        "type": "number",
+        "description": "Number of results per page",
+        "default": 9,
+        "notes": "Can likely be increased to 100+ for better coverage"
+      }
+    },
+    "inferred_response_structure": {
+      "description": "Based on standard rental listing API patterns and request structure",
+      "likely_structure": {
+        "results": "Array<Listing>",
+        "total": "number",
+        "page": "number",
+        "per_page": "number"
+      },
+      "possible_top_level_keys": [
+        "results",
+        "listings",
+        "data",
+        "apartments",
+        "objects"
+      ]
+    },
+    "expected_listing_fields": {
+      "id_fields": [
+        "id",
+        "listing_id",
+        "object_id",
+        "rental_object_id"
+      ],
+      "location_fields": [
+        "address",
+        "street",
+        "location",
+        "area",
+        "district",
+        "city"
+      ],
+      "price_fields": [
+        "rent",
+        "price",
+        "monthly_rent",
+        "rent_per_month"
+      ],
+      "rooms_fields": [
+        "rooms",
+        "room_count",
+        "number_of_rooms"
+      ],
+      "area_fields": [
+        "sqm",
+        "area",
+        "size",
+        "living_area"
+      ],
+      "date_fields": [
+        "published_at",
+        "created_at",
+        "available_from",
+        "move_in_date"
+      ],
+      "url_fields": [
+        "url",
+        "link",
+        "detail_url"
+      ],
+      "image_fields": [
+        "image",
+        "images",
+        "primary_image",
+        "thumbnail"
+      ],
+      "geo_fields": [
+        "latitude",
+        "longitude",
+        "lat",
+        "lng",
+        "coordinates"
+      ]
+    },
+    "mapping_to_apartment_type": {
+      "id": "homeq_${listing.id || listing.listing_id}",
+      "location": "listing.address || listing.street || listing.location",
+      "price": "Number(listing.rent || listing.price)",
+      "rooms": "Number(listing.rooms || listing.room_count)",
+      "sqm": "Number(listing.sqm || listing.area || listing.size)",
+      "url": "listing.url || `https://www.homeq.se/listing/${listing.id}`",
+      "postedAt": "listing.published_at || listing.created_at || new Date().toISOString()"
+    },
+    "geo_bounds_calculation": {
+      "description": "The example shows Lund area with ~20km radius",
+      "center_point": {
+        "lat": 55.7047,
+        "lng": 13.1910,
+        "city": "Lund, Sweden"
+      },
+      "calculated_bounds": {
+        "min_lat": 55.669813435465386,
+        "max_lat": 55.74509980198138,
+        "min_lng": 13.030489237226533,
+        "max_lng": 13.365440762774853
+      },
+      "approximate_radius_km": 20,
+      "notes": "Bounds calculated using haversine/spherical distance formulas"
+    },
+    "auth_flow": {
+      "likely_endpoints": [
+        "https://api.homeq.se/api/auth/login",
+        "https://api.homeq.se/api/v3/auth/login",
+        "https://api.homeq.se/api/v3/login"
+      ],
+      "likely_request": {
+        "method": "POST",
+        "body": {
+          "email": "user@example.com",
+          "password": "password"
+        }
+      },
+      "likely_response": {
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...",
+        "or": {
+          "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...",
+          "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+        },
+        "user": "object",
+        "expires_in": "number (seconds)",
+        "expires_at": "ISO date string"
+      },
+      "token_lifetime": {
+        "estimated": "7-30 days",
+        "notes": "JWT tokens typically last 7-30 days for rental platforms. Plan implementation uses 7 days."
+      },
+      "refresh_strategy": {
+        "approach": "Cache token with expiry timestamp in Redis/KV",
+        "refresh_trigger": "On 401 response or when cached token expired",
+        "auto_retry": "On auth failure, refresh token and retry original request once"
+      }
+    },
+    "rate_limiting": {
+      "unknown": true,
+      "recommended_approach": "Implement retry with exponential backoff",
+      "notes": "Monitor for 429 responses or rate limit headers"
+    },
+    "implementation_notes": {
+      "pagination": "Response likely includes total count - can implement if needed",
+      "error_handling": "401 = auth expired, 400 = invalid params, 500 = server error",
+      "testing": "Will need real credentials to verify actual response structure",
+      "fallback": "Return empty array on any error to avoid breaking multi-provider flow",
+      "id_prefix": "Prefix all IDs with 'homeq_' to distinguish from boplatssyd provider"
+    }
+  },
+  "example_curl_command": {
+    "original": "curl \"https://api.homeq.se/api/v3/search\" -H \"authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\" --data-raw '{\"min_room\":\"2\",\"max_room\":\"4\",\"is_early_access\":false,\"sorting\":\"boost_value.desc\",\"geo_bounds\":{\"min_lat\":55.669813435465386,\"min_lng\":13.030489237226533,\"max_lat\":55.74509980198138,\"max_lng\":13.365440762774853},\"zoom\":10.62,\"page\":1,\"amount\":9}'",
+    "for_testing": "Replace JWT token with fresh token from auth endpoint"
+  }
+}
