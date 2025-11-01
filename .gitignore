@@ -3,3 +3,4 @@
 .output
 .nitro
 node_modules
+.worktrees/
