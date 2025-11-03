@@ -18,6 +18,11 @@ export function filterApartments(apartments: Apartment[], config: FilterConfig):
       return false
     }
 
+    // Min sqm
+    if (apt.sqm < config.minSqm) {
+      return false
+    }
+
     return true
   })
 

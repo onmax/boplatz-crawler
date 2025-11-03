@@ -48,7 +48,7 @@ async function fetchApartments(): Promise<Apartment[]> {
       price: Number(apt.rent),
       rooms: Number(apt.rooms),
       sqm: Number(apt.area),
-      url: `https://www.boplatssyd.se/mypages/app?region=${encodeURIComponent(apt.regionName)}#/object/${apt.rentalObjectId}`,
+      url: `https://www.boplatssyd.se/mypages/app/visa/${apt.rentalObjectId}`,
       postedAt: apt.moveInDateFormated ? new Date(apt.moveInDateFormated) : new Date(),
     }))
 

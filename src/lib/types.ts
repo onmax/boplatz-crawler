@@ -13,4 +13,5 @@ export type FilterConfig = {
   minPrice: number
   maxPrice: number
   minRooms: number
+  minSqm: number
 }

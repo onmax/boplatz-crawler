@@ -15,6 +15,7 @@ describe('filter', () => {
     minPrice: 11000,
     maxPrice: 17000,
     minRooms: 2,
+    minSqm: 0,
   }
 
   it('filters by location', () => {
@@ -31,6 +32,13 @@ describe('filter', () => {
   it('filters by min rooms', () => {
     const result = filterApartments(apartments, config)
     expect(result.every(a => a.rooms >= 2)).toBe(true)
+  })
+
+  it('filters by min sqm', () => {
+    const sqmConfig: FilterConfig = { ...config, minSqm: 58 }
+    const result = filterApartments(apartments, sqmConfig)
+    expect(result.every(a => a.sqm >= 58)).toBe(true)
+    expect(result.map(a => a.id)).toEqual(['4']) // only id 4 has sqm >= 58
   })
 
   it('applies all filters', () => {

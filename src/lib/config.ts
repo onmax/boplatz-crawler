@@ -8,6 +8,7 @@ export function getFilterConfig(): FilterConfig {
     minPrice: env.FILTER_MIN_PRICE ? Number(env.FILTER_MIN_PRICE) : 0,
     maxPrice: env.FILTER_MAX_PRICE ? Number(env.FILTER_MAX_PRICE) : Number.POSITIVE_INFINITY,
     minRooms: env.FILTER_MIN_ROOMS ? Number(env.FILTER_MIN_ROOMS) : 1,
+    minSqm: env.FILTER_MIN_SQM ? Number(env.FILTER_MIN_SQM) : 0,
   }
 
   return config
